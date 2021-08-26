@@ -25,7 +25,7 @@ export default function DashboardContent({ profile }: Props) {
         <div className="w-full h-full text-white flex flex-col items-center gap-8">
             <div className="w-full flex flex-col self-start items-center gap-8 mt-8">
                 <div className="flex gap-8 items-center">
-                    {profile.images.length && <img alt="Profile" className="rounded-full w-32 h-32" src={profile.images[0].url} />}
+                    {profile.images.length ? <img alt="Profile" className="rounded-full w-32 h-32" src={profile.images[0].url} /> : ''}
                     <div className="flex flex-col gap-2">
                         <strong className="font-bold text-3xl text-purple-200">Welcome</strong>
                         <h1 className="font-thin text-2xl">{profile.display_name}</h1>
