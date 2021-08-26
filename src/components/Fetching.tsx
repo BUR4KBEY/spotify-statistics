@@ -1,4 +1,4 @@
-import SpinnerSVG from '../svg/spinner';
+import SpinnerSVG from './Spinner';
 
 interface Props {
     color: string;

@@ -4,9 +4,10 @@ import { Redirect } from 'react-router-dom';
 
 import { LoginIcon } from '@heroicons/react/outline';
 
+import GithubPNG from '../assets/github.png';
+import SpotifySVG from '../assets/spotify.svg';
 import Button from '../components/Button/Button';
 import { AuthContext } from '../context/AuthContext';
-import SpotifySVG from '../svg/spotify.svg';
 import { getAuthURL } from '../utils/functions';
 
 export default function IndexPage() {
@@ -24,6 +25,7 @@ export default function IndexPage() {
                 child={<LoginIcon className="h-5 w-5 mr-3" />}
                 onClick={() => (window.location.href = getAuthURL(env.CLIENT_ID, env.REDIRECT_URI, JSON.parse(env.SCOPES)))}
             />
+            <img alt="Github" src={GithubPNG} className="w-8 h-8 cursor-pointer" onClick={() => window.open('https://github.com/bur4kbey/spotify-statistics', '_blank')} />
         </div>
     ) : (
         <Redirect to="/dashboard" />
