@@ -3,6 +3,7 @@ import { useContext, useState } from 'react';
 import { LogoutIcon } from '@heroicons/react/outline';
 
 import { AuthContext } from '../context/AuthContext';
+import { getTimeRangeString } from '../utils/functions';
 import { Profile } from '../utils/interfaces';
 import Button from './Button/Button';
 import CustomRadioButton from './Button/CustomRadioButton';
@@ -38,11 +39,11 @@ export default function DashboardContent({ profile }: Props) {
                 <CustomRadioButton state={type} setState={setType} value="artists" label="Artists" />
             </div>
             <div className="flex gap-4">
-                <CustomRadioButton state={timeRange} setState={setTimeRange} value="short_term" label="Last 4 Week" />
-                <CustomRadioButton state={timeRange} setState={setTimeRange} value="medium_term" label="Last 6 Months" />
-                <CustomRadioButton state={timeRange} setState={setTimeRange} value="long_term" label="All Time" />
+                {['short_term', 'medium_term', 'long_term'].map((item, index) => (
+                    <CustomRadioButton key={`radio-${index}`} state={timeRange} setState={setTimeRange} value={item} label={getTimeRangeString(item)} />
+                ))}
             </div>
-            {type === 'tracks' ? <GetTrack timeRange={timeRange} /> : <GetArtist timeRange={timeRange} />}
+            {type === 'tracks' ? <GetTrack timeRange={timeRange} profile={profile} /> : <GetArtist timeRange={timeRange} />}
         </div>
     );
 }

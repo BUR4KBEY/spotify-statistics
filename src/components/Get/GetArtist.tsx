@@ -1,5 +1,5 @@
+import useGetRequest from '../../requests/useGetRequest';
 import { Artist, InfoResponse } from '../../utils/interfaces';
-import useRequest from '../../utils/useRequest';
 import Error from '../Error';
 import Fetching from '../Fetching';
 import ArtistInfo from '../Info/ArtistInfo';
@@ -9,7 +9,7 @@ interface Props {
 }
 
 export default function GetArtist({ timeRange }: Props) {
-    const { data, fetching, error } = useRequest<InfoResponse<Artist>>(`me/top/artists?limit=50&time_range=${timeRange}`);
+    const { data, fetching, error } = useGetRequest<InfoResponse<Artist>>(`me/top/artists?limit=50&time_range=${timeRange}`);
 
     return data ? (
         <div className="mb-8">

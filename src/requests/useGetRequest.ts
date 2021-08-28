@@ -3,7 +3,7 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import API from '../class/API';
 import { AuthContext } from '../context/AuthContext';
 
-export default function useRequest<T>(endpoint: string) {
+export default function useGetRequest<T>(endpoint: string) {
     const { token } = useContext(AuthContext);
 
     const [fetching, setFetching] = useState<boolean>(false);
@@ -19,7 +19,7 @@ export default function useRequest<T>(endpoint: string) {
             setFetching(false);
             setData(body);
         } catch (error) {
-            if (error.response.status === 429) {
+            if (error.response?.status === 429) {
                 setTimeout(() => loadData(), Number(error.response.headers['Retry-After']));
             } else {
                 setFetching(false);

@@ -24,15 +24,24 @@ export function getAuthURL(clientId: string, redirectURI: string, scopes: string
 
 export async function isTokenValid(token: string, callback: () => void) {
     try {
-        const response = await axios.get('https://api.spotify.com/v1/me', {
+        await axios.get('https://api.spotify.com/v1/me', {
             headers: {
                 Authorization: token
             }
         });
-
-        console.log(response.data);
         callback();
-    } catch (_) {
-        console.log('error');
+    } catch (_) {}
+}
+
+export function getTimeRangeString(timeRange: string): string {
+    switch (timeRange) {
+        case 'short_term':
+            return 'Last 4 Week';
+        case 'medium_term':
+            return 'Last 6 Month';
+        case 'long_term':
+            return 'All Time';
+        default:
+            return 'Invalid time range.';
     }
 }
