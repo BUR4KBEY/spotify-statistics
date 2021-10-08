@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { PlusCircleIcon } from '@heroicons/react/solid';
 
@@ -9,6 +9,7 @@ import { InfoResponse, Playlist, Profile, Track } from '../../utils/interfaces';
 import Button from '../Button/Button';
 import Error from '../Error';
 import Fetching from '../Fetching';
+import ArtistInfo from '../Info/ArtistInfo';
 import TrackInfo from '../Info/TrackInfo';
 
 interface Props {
@@ -18,6 +19,8 @@ interface Props {
 
 export default function GetTrack({ timeRange, profile }: Props) {
     const { data, fetching, error } = useGetRequest<InfoResponse<Track>>(`me/top/tracks?limit=50&time_range=${timeRange}`);
+
+    const [trackCount, setTrackCount] = useState<any>([]);
 
     const plRequest = usePostRequest<Playlist>(`users/${profile.id}/playlists`, {
         name: `S4S - Top Tracks - ${getTimeRangeString(timeRange)}`,
@@ -50,6 +53,24 @@ export default function GetTrack({ timeRange, profile }: Props) {
         if (trackRequest.error) alert(trackRequest.error);
     }, [trackRequest.error]);
 
+    useEffect(() => {
+        if (!data) return;
+
+        var cache: any = {};
+
+        for (const item of data.items) {
+            if (cache[item.artists[0].name]) {
+                cache[item.artists[0].name]++;
+            } else {
+                cache[item.artists[0].name] = 1;
+            }
+        }
+
+        cache = Object.entries(cache).sort((a: any, b: any) => b[1] - a[1]);
+
+        setTrackCount(cache);
+    }, [data]);
+
     return data ? (
         <>
             <Button
@@ -60,6 +81,18 @@ export default function GetTrack({ timeRange, profile }: Props) {
                 disabled={plRequest.fetching || trackRequest.fetching}
             />
             <div className="mb-8">
+                <div className="mb-8 flex flex-col justify-center items-center">
+                    <strong className="font-bold text-2xl text-purple-200 mb-4">Track Counts By Artist</strong>
+                    <div className="flex flex-col">
+                        {trackCount.map((x: any) => (
+                            <div className="flex gap-4">
+                                <strong className="font-bold text-base text-pink-400 mb-4">{x[0]}</strong>
+                                <strong className="font-bold text-base text-pink-200 mb-4">{x[1]}</strong>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
                 {data.items.map((item, index) => (
                     <TrackInfo key={`track-${index}`} track={item} index={index} />
                 ))}
